@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 import './app_themes.dart';
-import './board_page.dart';
+import 'app_screen.dart';
 
 void main() {
   runApp(const FludokuDemoApp());
@@ -42,7 +42,7 @@ class _FludokuDemoAppState extends State<FludokuDemoApp> {
                     DefaultCupertinoLocalizations.delegate,
                   ],
                   title: 'Fludoku Demo',
-                  home: BoardPage(title: 'Fludoku Demo'),
+                  home: AppScreen(title: 'Fludoku Demo'),
                 )));
   }
 }
