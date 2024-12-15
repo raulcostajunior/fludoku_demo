@@ -1,63 +1,48 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+
+import './app_themes.dart';
+import './board_page.dart';
 
 void main() {
   runApp(const FludokuDemoApp());
 }
 
-class FludokuDemoApp extends StatelessWidget {
+class FludokuDemoApp extends StatefulWidget {
   const FludokuDemoApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fludoku Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: const BoardPage(title: 'Fludoku Demo'),
-    );
-  }
+  State<FludokuDemoApp> createState() => _FludokuDemoAppState();
 }
 
-class BoardPage extends StatefulWidget {
-  const BoardPage({super.key, required this.title});
+class _FludokuDemoAppState extends State<FludokuDemoApp> {
+  ThemeMode? themeMode = ThemeMode.system;
 
-  final String title;
-
-  @override
-  State<BoardPage> createState() => _BoardPageState();
-}
-
-class _BoardPageState extends State<BoardPage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 2,
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.add_box_outlined),
-                  tooltip: 'Generate Board',
-                  onPressed: () {},
-                ),
-                const IconButton(
-                    icon: Icon(Icons.tips_and_updates_rounded),
-                    tooltip: 'Solve Board',
-                    onPressed: null),
-                IconButton(
-                    icon: const Icon(Icons.settings_outlined),
-                    tooltip: 'Settings',
-                    onPressed: () {}),
-              ],
-              title: Text(widget.title),
-            ),
-            body: const Center(
-                child: Icon(
-              Icons.grid_on_rounded,
-              size: 150,
-            ))));
+    return PlatformProvider(
+        settings: PlatformSettingsData(
+            iosUsesMaterialWidgets: true,
+            iosUseZeroPaddingForAppbarPlatformIcon: true),
+        builder: (context) => PlatformTheme(
+            themeMode: themeMode,
+            materialLightTheme: materialLightTheme,
+            materialDarkTheme: materialDarkTheme,
+            cupertinoLightTheme: cupertinoLightTheme,
+            cupertinoDarkTheme: cupertinoDarkTheme,
+            matchCupertinoSystemChromeBrightness: true,
+            onThemeModeChanged: (themeMode) {
+              this.themeMode = themeMode; /* you can save to storage */
+            },
+            builder: (context) => const PlatformApp(
+                  localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+                    DefaultMaterialLocalizations.delegate,
+                    DefaultWidgetsLocalizations.delegate,
+                    DefaultCupertinoLocalizations.delegate,
+                  ],
+                  title: 'Fludoku Demo',
+                  home: BoardPage(title: 'Fludoku Demo'),
+                )));
   }
 }
