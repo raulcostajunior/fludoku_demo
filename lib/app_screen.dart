@@ -37,11 +37,6 @@ class _AppScreenState extends State<AppScreen> {
                   MaterialIconButtonData(tooltip: 'Solve Board'),
               onPressed: null,
             ),
-            // PlatformIconButton(
-            //     icon: Icon(PlatformIcons(context).settings),
-            //     material: (_, __) =>
-            //         MaterialIconButtonData(tooltip: 'Settings'),
-            //     onPressed: () {}),
           ],
           title: Text(widget.title),
         ),
