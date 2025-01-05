@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'board_settings_material.dart';
@@ -21,8 +22,13 @@ class _AppScreenState extends State<AppScreen> {
           material: (_, __) => MaterialAppBarData(elevation: 2),
           trailingActions: <Widget>[
             IconButton(
-                icon: const Icon(Icons.grid_on_rounded, size: 28),
-                tooltip: 'New Board',
+                icon: PlatformWidget(
+                    material: (_, __) =>
+                        const Icon(Icons.grid_view_rounded, size: 28),
+                    cupertino: (_, __) =>
+                        const Icon(CupertinoIcons.square_grid_2x2, size: 28)),
+                //const Icon(Icons.grid_on_rounded, size: 28),
+                tooltip: 'Create New Board',
                 onPressed: () {
                   showPlatformModalSheet(
                       context: context,
@@ -30,25 +36,34 @@ class _AppScreenState extends State<AppScreen> {
                           cupertino: (_, __) => const BoardSettingsCupertino(),
                           material: (_, __) => const BoardSettingsMaterial()));
                 }),
-            const IconButton(
-              icon: Icon(Icons.tips_and_updates, size: 28),
+            IconButton(
+              icon: PlatformWidget(
+                  material: (_, __) =>
+                      const Icon(Icons.lightbulb_rounded, size: 28),
+                  cupertino: (_, __) =>
+                      const Icon(CupertinoIcons.lightbulb, size: 28)),
               tooltip: 'Solve Board',
               onPressed: null,
             ),
           ],
           title: Text(widget.title),
         ),
-        body: const Center(
+        body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.grid_on_rounded,
-              size: 120,
+            IconButton(
+              icon: PlatformWidget(
+                  material: (_, __) =>
+                      const Icon(Icons.grid_view_rounded, size: 80),
+                  cupertino: (_, __) =>
+                      const Icon(CupertinoIcons.square_grid_2x2, size: 80)),
+              onPressed: () {},
+              tooltip: "Create New Board",
             ),
-            SizedBox(height: 20),
-            Text(
-              "To create a Board, \npress the grid icon in the top bar.",
+            const SizedBox(height: 12),
+            const Text(
+              "Create New Board",
               textAlign: TextAlign.center,
             )
           ],
