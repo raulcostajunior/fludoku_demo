@@ -24,7 +24,7 @@ class _FludokuDemoAppState extends State<FludokuDemoApp> {
     return PlatformProvider(
         settings: PlatformSettingsData(
             iosUsesMaterialWidgets: true,
-            iosUseZeroPaddingForAppbarPlatformIcon: true),
+            iosUseZeroPaddingForAppbarPlatformIcon: false),
         builder: (context) => PlatformTheme(
             themeMode: themeMode,
             materialLightTheme: materialLightTheme,
@@ -43,6 +43,7 @@ class _FludokuDemoAppState extends State<FludokuDemoApp> {
                   ],
                   title: 'Fludoku Demo',
                   home: AppScreen(title: 'Fludoku Demo'),
+                  debugShowCheckedModeBanner: false,
                 )));
   }
 }

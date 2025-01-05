@@ -3,9 +3,6 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'board_settings_material.dart';
 import 'board_settings_cupertino.dart';
 
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/material_symbols.dart';
-
 class AppScreen extends StatefulWidget {
   const AppScreen({super.key, required this.title});
 
@@ -24,11 +21,7 @@ class _AppScreenState extends State<AppScreen> {
           material: (_, __) => MaterialAppBarData(elevation: 2),
           trailingActions: <Widget>[
             IconButton(
-                icon: Iconify(MaterialSymbols.grid_view_outline_rounded,
-                    color: MediaQuery.of(context).platformBrightness ==
-                            Brightness.dark
-                        ? Colors.white
-                        : Colors.black),
+                icon: const Icon(Icons.grid_on_rounded, size: 28),
                 tooltip: 'New Board',
                 onPressed: () {
                   showPlatformModalSheet(
@@ -37,22 +30,28 @@ class _AppScreenState extends State<AppScreen> {
                           cupertino: (_, __) => const BoardSettingsCupertino(),
                           material: (_, __) => const BoardSettingsMaterial()));
                 }),
-            IconButton(
-              icon: Iconify(MaterialSymbols.tips_and_updates_outline,
-                  color: MediaQuery.of(context).platformBrightness ==
-                          Brightness.dark
-                      ? Colors.white
-                      : Colors.black),
+            const IconButton(
+              icon: Icon(Icons.tips_and_updates, size: 28),
               tooltip: 'Solve Board',
               onPressed: null,
             ),
           ],
           title: Text(widget.title),
         ),
-        body: Center(
-            child: Icon(
-          PlatformIcons(context).addCircledOutline,
-          size: 150,
+        body: const Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.grid_on_rounded,
+              size: 120,
+            ),
+            SizedBox(height: 20),
+            Text(
+              "To create a Board, \npress the grid icon in the top bar.",
+              textAlign: TextAlign.center,
+            )
+          ],
         )));
   }
 }
