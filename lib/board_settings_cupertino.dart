@@ -55,7 +55,7 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                 ),
                 children: [
                   CupertinoFormRow(
-                    prefix: const Text('Difficulty'),
+                    prefix: const Text('Board Difficulty'),
                     child: CupertinoSlidingSegmentedControl<String>(
                       children: const {
                         'Easy': Text('Easy'),
