@@ -51,7 +51,6 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                 footer: const Padding(
                   padding: EdgeInsets.only(top: 6.0),
                   child: Text(
-                      'Difficulty level for the board to be generated.\n'
                       'Harder levels generate boards with more blank positions.'),
                 ),
                 children: [
