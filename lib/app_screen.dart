@@ -58,7 +58,13 @@ class _AppScreenState extends State<AppScreen> {
                       const Icon(Icons.grid_view_rounded, size: 80),
                   cupertino: (_, __) =>
                       const Icon(CupertinoIcons.square_grid_2x2, size: 80)),
-              onPressed: () {},
+              onPressed: () {
+                showPlatformModalSheet(
+                    context: context,
+                    builder: (context) => PlatformWidget(
+                        cupertino: (_, __) => const BoardSettingsCupertino(),
+                        material: (_, __) => const BoardSettingsMaterial()));
+              },
               tooltip: "Create New Board",
             ),
             const SizedBox(height: 12),
