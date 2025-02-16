@@ -14,6 +14,14 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
+  void onNewBoardPressed() {
+    showPlatformModalSheet(
+        context: context,
+        builder: (context) => PlatformWidget(
+            cupertino: (_, __) => const BoardSettingsCupertino(),
+            material: (_, __) => const BoardSettingsMaterial()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -29,13 +37,7 @@ class _AppScreenState extends State<AppScreen> {
                         const Icon(CupertinoIcons.square_grid_2x2, size: 28)),
                 //const Icon(Icons.grid_on_rounded, size: 28),
                 tooltip: 'Create New Board',
-                onPressed: () {
-                  showPlatformModalSheet(
-                      context: context,
-                      builder: (context) => PlatformWidget(
-                          cupertino: (_, __) => const BoardSettingsCupertino(),
-                          material: (_, __) => const BoardSettingsMaterial()));
-                }),
+                onPressed: onNewBoardPressed),
             IconButton(
               icon: PlatformWidget(
                   material: (_, __) =>
@@ -58,13 +60,7 @@ class _AppScreenState extends State<AppScreen> {
                       const Icon(Icons.grid_view_rounded, size: 80),
                   cupertino: (_, __) =>
                       const Icon(CupertinoIcons.square_grid_2x2, size: 80)),
-              onPressed: () {
-                showPlatformModalSheet(
-                    context: context,
-                    builder: (context) => PlatformWidget(
-                        cupertino: (_, __) => const BoardSettingsCupertino(),
-                        material: (_, __) => const BoardSettingsMaterial()));
-              },
+              onPressed: onNewBoardPressed,
               tooltip: "Create New Board",
             ),
             const SizedBox(height: 12),
