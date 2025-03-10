@@ -25,7 +25,7 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                 footer: const Padding(
                   padding: EdgeInsets.only(top: 6.0),
                   child: Text(
-                      'Number of rows and columns of the board to be generated.'),
+                      'Number of rows and columns on the generated board.'),
                 ),
                 children: [
                   CupertinoFormRow(
