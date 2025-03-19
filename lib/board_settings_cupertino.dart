@@ -14,8 +14,15 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('New Sudoku Board'),
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text('New Sudoku Board'),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            // Add your logic for creating a new Sudoku board here
+          },
+          child: const Text('Create'),
+        ),
       ),
       child: SafeArea(
         child: Center(
@@ -24,8 +31,8 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
               CupertinoFormSection(
                 footer: const Padding(
                   padding: EdgeInsets.only(top: 6.0),
-                  child: Text(
-                      'Number of rows and columns on the generated board.'),
+                  child:
+                      Text('Number of rows and columns on the created board.'),
                 ),
                 children: [
                   CupertinoFormRow(
@@ -51,7 +58,7 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                 footer: const Padding(
                   padding: EdgeInsets.only(top: 6.0),
                   child: Text(
-                      'Harder levels generate boards with more blank positions.'),
+                      'Harder levels create boards with more blank positions.'),
                 ),
                 children: [
                   CupertinoFormRow(
