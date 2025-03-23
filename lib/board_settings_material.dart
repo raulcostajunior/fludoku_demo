@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:fludoku/fludoku.dart';
 
-class BoardSettingsMaterial extends StatelessWidget {
+class BoardSettingsMaterial extends StatefulWidget {
   const BoardSettingsMaterial({super.key});
 
-// TODO: Refactor Text captions into a single place - currently duplicated between Cupertino and Material
+  @override
+  State<BoardSettingsMaterial> createState() => _BoardSettingsMaterialState();
+}
 
-// TODO: Use predefined styles like Header and Body instead of the fontSizeFactor and fontWeightFactor currently used.
+class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
+  Set<int> boardSize = {9};
+  Set<PuzzleDifficulty> boardDifficulty = {PuzzleDifficulty.easy};
+
+  // TODO: Refactor Text captions into a single place - currently duplicated between Cupertino and Material
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 4.0,
             children: <Widget>[
@@ -31,16 +38,22 @@ class BoardSettingsMaterial extends StatelessWidget {
                           .style
                           .apply(fontWeightDelta: 2)),
                   SegmentedButton<int>(
+                    // When the tick of the selected icon is shown, the
+                    // segments are rescaled to accomodate the icon and that
+                    // causes an annoying "readjustment" of the lay-out.
+                    showSelectedIcon: false,
                     segments: const <ButtonSegment<int>>[
                       ButtonSegment<int>(value: 4, label: Text('4')),
                       ButtonSegment<int>(value: 9, label: Text('9')),
                       ButtonSegment<int>(value: 16, label: Text('16')),
                       ButtonSegment<int>(value: 25, label: Text('25')),
                     ],
-                    selected: const {
-                      9,
+                    selected: boardSize,
+                    onSelectionChanged: (selection) => {
+                      setState(() {
+                        boardSize = selection;
+                      })
                     },
-                    onSelectionChanged: (selection) => {},
                   ),
                 ],
               ),
@@ -57,6 +70,8 @@ class BoardSettingsMaterial extends StatelessWidget {
                           .style
                           .apply(fontWeightDelta: 2)),
                   SegmentedButton<PuzzleDifficulty>(
+                    // The same note from the Board Size SegmentedButton applies
+                    showSelectedIcon: false,
                     segments: const <ButtonSegment<PuzzleDifficulty>>[
                       ButtonSegment<PuzzleDifficulty>(
                           value: PuzzleDifficulty.easy, label: Text('Easy')),
@@ -66,10 +81,12 @@ class BoardSettingsMaterial extends StatelessWidget {
                       ButtonSegment<PuzzleDifficulty>(
                           value: PuzzleDifficulty.hard, label: Text('Hard'))
                     ],
-                    selected: const {
-                      PuzzleDifficulty.easy,
+                    selected: boardDifficulty,
+                    onSelectionChanged: (selection) => {
+                      setState(() {
+                        boardDifficulty = selection;
+                      })
                     },
-                    onSelectionChanged: (selection) => {},
                   ),
                 ],
               ),
@@ -79,6 +96,19 @@ class BoardSettingsMaterial extends StatelessWidget {
                       .style
                       .apply(fontSizeFactor: 0.9)),
               const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    child: const Text('Create'),
+                    onPressed: () => {},
+                  ),
+                  TextButton(
+                    child: const Text('Dismiss'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  )
+                ],
+              )
             ]),
       ),
     );
