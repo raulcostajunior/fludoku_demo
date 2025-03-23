@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fludoku/fludoku.dart';
 
 class BoardSettingsCupertino extends StatefulWidget {
   const BoardSettingsCupertino({super.key});
@@ -9,7 +10,7 @@ class BoardSettingsCupertino extends StatefulWidget {
 
 class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
   int boardSize = 9;
-  String boardDifficulty = 'Easy';
+  PuzzleDifficulty boardDifficulty = PuzzleDifficulty.easy;
 
   @override
   Widget build(BuildContext context) {
@@ -63,14 +64,14 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                 children: [
                   CupertinoFormRow(
                     prefix: const Text('Board Difficulty'),
-                    child: CupertinoSlidingSegmentedControl<String>(
+                    child: CupertinoSlidingSegmentedControl<PuzzleDifficulty>(
                       children: const {
-                        'Easy': Text('Easy'),
-                        'Medium': Text('Medium'),
-                        'Hard': Text('Hard'),
+                        PuzzleDifficulty.easy: Text('Easy'),
+                        PuzzleDifficulty.medium: Text('Medium'),
+                        PuzzleDifficulty.hard: Text('Hard'),
                       },
                       groupValue: boardDifficulty,
-                      onValueChanged: (String? value) {
+                      onValueChanged: (PuzzleDifficulty? value) {
                         setState(() {
                           boardDifficulty = value!;
                         });
