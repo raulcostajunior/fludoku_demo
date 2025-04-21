@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fludoku/fludoku.dart';
+import 'board_provider.dart';
 
 class BoardSettingsMaterial extends StatefulWidget {
   const BoardSettingsMaterial({super.key});
@@ -15,6 +16,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
   // TODO: Refactor Text captions into a single place - currently duplicated between Cupertino and Material
   @override
   Widget build(BuildContext context) {
+    final boardViewModel = BoardProvider.of(context);
     return Material(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -101,7 +103,12 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                 children: [
                   ElevatedButton(
                     child: const Text('Create'),
-                    onPressed: () => {},
+                    onPressed: () {
+                      boardViewModel.generateBoard(
+                          level: boardDifficulty.first,
+                          dimension: boardSize.first);
+                      Navigator.of(context).pop();
+                    },
                   ),
                   TextButton(
                     child: const Text('Dismiss'),

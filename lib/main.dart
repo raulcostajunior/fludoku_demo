@@ -4,6 +4,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 import 'app_themes.dart';
 import 'app_screen.dart';
+import 'board_provider.dart';
+import 'board_view_model.dart';
 
 void main() {
   runApp(const FludokuDemoApp());
@@ -21,7 +23,9 @@ class _FludokuDemoAppState extends State<FludokuDemoApp> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformProvider(
+    return BoardProvider(
+      viewModel: BoardViewModel(),
+        child: PlatformProvider(
         settings: PlatformSettingsData(
             iosUsesMaterialWidgets: true,
             iosUseZeroPaddingForAppbarPlatformIcon: false),
@@ -44,6 +48,7 @@ class _FludokuDemoAppState extends State<FludokuDemoApp> {
                   title: 'Fludoku Demo',
                   home: AppScreen(title: 'Fludoku Demo'),
                   debugShowCheckedModeBanner: false,
-                )));
+                ))))
+    ;
   }
 }

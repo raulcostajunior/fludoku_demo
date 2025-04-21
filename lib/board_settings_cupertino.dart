@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fludoku/fludoku.dart';
+import 'board_provider.dart';
 
 class BoardSettingsCupertino extends StatefulWidget {
   const BoardSettingsCupertino({super.key});
@@ -14,13 +15,16 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
 
   @override
   Widget build(BuildContext context) {
+    final boardViewModel = BoardProvider.of(context);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text('New Sudoku Board'),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () {
-            // Add your logic for creating a new Sudoku board here
+            boardViewModel.generateBoard(
+                level: boardDifficulty, dimension: boardSize);
+            Navigator.of(context).pop();
           },
           child: const Text('Create'),
         ),
