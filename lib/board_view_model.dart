@@ -64,7 +64,7 @@ class BoardViewModel extends ChangeNotifier {
     if (!_generating) {
       throw Exception("No board generation to be cancelled!");
     }
-    // Note: As the generateBoard is not cancellable the cancel generation must terminate the worker.
+    // Note: As the generateBoard from Fludoku is not cancellable the cancel generation must terminate the worker.
     // TODO: dispose the worker (see how safe it is to do it immediately)
   }
 
