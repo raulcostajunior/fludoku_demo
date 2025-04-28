@@ -40,15 +40,15 @@ class BoardViewModel extends ChangeNotifier {
       {required PuzzleDifficulty level,
       required int dimension,
       int timeoutSecs = 15}) {
+    if (_generating) {
+      // Only one board generation is possible at a given time.
+      throw Exception("A board generation is already taking place!");
+    }
     if (_worker == null) {
       _worker = Worker();
       _worker!.init(_handleWorkerMessages,
           _handleGenerationCommands /* runs on the background Isolate managed by the Worker */,
           errorHandler: _handleGenerationError, exitHandler: _handleWorkerExit);
-    }
-    if (_generating) {
-      // Only one board generation is possible at a given time.
-      throw Exception("A board generation is already taking place!");
     }
     _generating = true;
     _generationCancelled = false;
