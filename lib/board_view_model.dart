@@ -9,10 +9,11 @@ import 'package:easy_isolate/easy_isolate.dart';
 ///
 /// Parameters:
 /// - `command`: the command for the worker - a record with
-///              the dimension and the difficulty of the board to be generated.
+///              the difficulty, the dimension, and the timeout for the board
+///              generation.
 /// - `commandSenderPort`: a port to communicate back with the command sender.
 /// - `sendError`: a function that can be used to send error information back
-///                to the command sender without raising an exception (not used)
+///                to the command sender without raising an exception.
 ///
 /// As this becomes the listener of the background Isolate kept by the worker,
 /// it will be on a thread that is not the one from the Main Isolate (the thread
@@ -22,7 +23,22 @@ import 'package:easy_isolate/easy_isolate.dart';
 /// function. We opt for the latter, as it seems to be cleaner.
 void _handleGenerationCommands(
     dynamic command, SendPort commandSenderPort, SendErrorFunction sendError) {
-  // TODO: handle Generation command sent by the BoardViewModel - the sendError function will be used to communicate timedOutGenerations
+  var (PuzzleDifficulty level, int dimension, int timeoutSecs) = command;
+
+  var (Board? genBoard, String? errorMsg) = generateBoard(
+      level: level,
+      dimension: dimension,
+      timeoutSecs: timeoutSecs,
+      onProgress: ({int current = 1, int total = 1}) {
+        commandSenderPort.send((current, total, null));
+      });
+  if (genBoard != null) {
+    // The board generation process succeeded - send the "final progress" update
+    // For the "final progress" update negative flagging values are used
+    commandSenderPort.send((-1, -1, genBoard));
+  } else {
+    sendError(errorMsg);
+  }
 }
 
 class BoardViewModel extends ChangeNotifier {
@@ -53,7 +69,7 @@ class BoardViewModel extends ChangeNotifier {
     _generating = true;
     _generationCancelled = false;
     try {
-      // TODO: send a message to the worker to trigger a board generation
+      _worker!.sendMessage((level, dimension, timeoutSecs));
       _generating = true;
     } finally {
       _generating = false;
@@ -68,8 +84,28 @@ class BoardViewModel extends ChangeNotifier {
     // TODO: dispose the worker (see how safe it is to do it immediately)
   }
 
+  /// Handles progress data sent by the Generator worker while generating the board and after it has been
+  /// generated.
+  ///
+  /// Parameters:
+  /// - `data`: progress data, a record with three parts, (int currentStep, int totalSteps, Board? genBoard).
+  ///           the genBoard will be null during the generation and be the generated board upon successful
+  ///           board generation (errors are sent to _handleGenerationError). For a completed board generation
+  ///           "final" update the worker will send -1 for both currentStep and totalSteps.
+  /// - `workSenderPort`: the port that can be used by the handler to communicate back with the Generator worker.
+  ///
   void _handleWorkerMessages(dynamic data, SendPort workerSendPort) {
-    // TODO: handle progress messages sent by the Generator worker
+    var (int currentStep, int totalSteps, Board? genBoard) = data;
+
+    if (genBoard != null) {
+      _board = genBoard;
+      // Ensures that at the end currentStep equals totalSteps
+      _currGenStep = _totalGenSteps;
+    } else {
+      _currGenStep = currentStep;
+      _totalGenSteps = totalSteps;
+    }
+    notifyListeners();
   }
 
   void _handleGenerationError(dynamic data) {
