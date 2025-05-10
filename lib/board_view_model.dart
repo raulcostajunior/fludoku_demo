@@ -45,8 +45,12 @@ class BoardViewModel extends ChangeNotifier {
   Board _board = Board();
   Worker? _worker;
 
+  int _boardSize = 9;
+  PuzzleDifficulty _boardDifficulty = PuzzleDifficulty.easy;
+
   bool _generating = false;
   bool _generationCancelled = false;
+  String? _generationError;
   int _currGenStep = 0;
   int _totalGenSteps = 0;
 
@@ -60,19 +64,18 @@ class BoardViewModel extends ChangeNotifier {
       // Only one board generation is possible at a given time.
       throw Exception("A board generation is already taking place!");
     }
+    _generationCancelled = false;
+    _generationError = null;
+    _generating = true;
     if (_worker == null) {
       _worker = Worker();
       _worker!.init(_handleWorkerMessages,
           _handleGenerationCommands /* runs on the background Isolate managed by the Worker */,
-          errorHandler: _handleGenerationError, exitHandler: _handleWorkerExit);
-    }
-    _generating = true;
-    _generationCancelled = false;
-    try {
+          errorHandler: _handleGenerationError,
+          exitHandler: _handleWorkerExit,
+          initialMessage: (level, dimension, timeoutSecs));
+    } else {
       _worker!.sendMessage((level, dimension, timeoutSecs));
-      _generating = true;
-    } finally {
-      _generating = false;
     }
   }
 
@@ -81,7 +84,9 @@ class BoardViewModel extends ChangeNotifier {
       throw Exception("No board generation to be cancelled!");
     }
     // Note: As the generateBoard from Fludoku is not cancellable the cancel generation must terminate the worker.
-    // TODO: dispose the worker (see how safe it is to do it immediately)
+    _worker!.dispose(immediate: true);
+    _generationCancelled = true;
+    _generating = false;
   }
 
   /// Handles progress data sent by the Generator worker while generating the board and after it has been
@@ -101,6 +106,8 @@ class BoardViewModel extends ChangeNotifier {
       _board = genBoard;
       // Ensures that at the end currentStep equals totalSteps
       _currGenStep = _totalGenSteps;
+      _generating = false;
+      debugPrint("Generated board:\n$genBoard");
     } else {
       _currGenStep = currentStep;
       _totalGenSteps = totalSteps;
@@ -109,18 +116,38 @@ class BoardViewModel extends ChangeNotifier {
   }
 
   void _handleGenerationError(dynamic data) {
-    // TODO: handle generation errors - by setting the proper errMsg on the viewModel state (to be added)
+    _generating = false;
+    _generationError = data;
+    debugPrint("Board generation error: $_generationError");
+    notifyListeners();
   }
 
   void _handleWorkerExit(dynamic data) {
-    // TODO: investigate if cancellation is the only way to reach this; no exception, except for the timeout, which should be handled by the _handleGenerationError, is expected
+    debugPrint("Generation worker exited: $data");
     _generationCancelled = true;
-    // TODO: handle worker isolate termination - sets the worker back to null (if needed) and
+    _generating = false;
+    _generationError = null;
   }
 
   //#endregion
 
   Board get board => _board;
+
+  int get boardSize => _boardSize;
+  set boardSize(int value) {
+    if (value != _boardSize) {
+      _boardSize = value;
+      notifyListeners();
+    }
+  }
+
+  PuzzleDifficulty get boardDifficulty => _boardDifficulty;
+  set boardDifficulty(PuzzleDifficulty value) {
+    if (value != _boardDifficulty) {
+      _boardDifficulty = value;
+      notifyListeners();
+    }
+  }
 
   bool get generating => _generating;
 
@@ -129,4 +156,6 @@ class BoardViewModel extends ChangeNotifier {
   int get totalGenSteps => _totalGenSteps;
 
   bool get generationCancelled => _generationCancelled;
+
+  String? get generationError => _generationError;
 }

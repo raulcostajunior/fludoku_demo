@@ -10,6 +10,7 @@ class BoardSettingsMaterial extends StatefulWidget {
 }
 
 class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
+  // TODO: initialize state from stored settings
   Set<int> boardSize = {9};
   Set<PuzzleDifficulty> boardDifficulty = {PuzzleDifficulty.easy};
 
@@ -104,6 +105,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                   ElevatedButton(
                     child: const Text('Create'),
                     onPressed: () {
+                      // TODO: update stored settings for the state
                       boardViewModel.generateBoard(
                           level: boardDifficulty.first,
                           dimension: boardSize.first);

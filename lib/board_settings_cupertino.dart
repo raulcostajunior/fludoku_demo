@@ -10,6 +10,7 @@ class BoardSettingsCupertino extends StatefulWidget {
 }
 
 class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
+  // TODO: initialize state from stored settings
   int boardSize = 9;
   PuzzleDifficulty boardDifficulty = PuzzleDifficulty.easy;
 
@@ -22,6 +23,7 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () {
+            // TODO: update stored settings for the state
             boardViewModel.generateBoard(
                 level: boardDifficulty, dimension: boardSize);
             Navigator.of(context).pop();
