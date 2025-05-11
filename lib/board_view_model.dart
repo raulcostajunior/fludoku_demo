@@ -45,9 +45,6 @@ class BoardViewModel extends ChangeNotifier {
   Board _board = Board();
   Worker? _worker;
 
-  int _boardSize = 9;
-  PuzzleDifficulty _boardDifficulty = PuzzleDifficulty.easy;
-
   bool _generating = false;
   bool _generationCancelled = false;
   String? _generationError;
@@ -132,22 +129,6 @@ class BoardViewModel extends ChangeNotifier {
   //#endregion
 
   Board get board => _board;
-
-  int get boardSize => _boardSize;
-  set boardSize(int value) {
-    if (value != _boardSize) {
-      _boardSize = value;
-      notifyListeners();
-    }
-  }
-
-  PuzzleDifficulty get boardDifficulty => _boardDifficulty;
-  set boardDifficulty(PuzzleDifficulty value) {
-    if (value != _boardDifficulty) {
-      _boardDifficulty = value;
-      notifyListeners();
-    }
-  }
 
   bool get generating => _generating;
 

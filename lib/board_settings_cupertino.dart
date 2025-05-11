@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fludoku/fludoku.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'board_provider.dart';
 
 class BoardSettingsCupertino extends StatefulWidget {
@@ -10,9 +11,29 @@ class BoardSettingsCupertino extends StatefulWidget {
 }
 
 class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
-  // TODO: initialize state from stored settings
-  int boardSize = 9;
-  PuzzleDifficulty boardDifficulty = PuzzleDifficulty.easy;
+  int? boardSize;
+  PuzzleDifficulty? boardDifficulty;
+
+  _BoardSettingsCupertinoState() {
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    final settings = await SharedPreferences.getInstance();
+    final boardSizePref = settings.getInt('boardSize') ?? 9;
+    final levelIdx = settings.getInt('boardDifficulty') ?? 0;
+    final boardDifficultyPref = PuzzleDifficulty.values[levelIdx];
+    setState(() {
+      boardSize = boardSizePref;
+      boardDifficulty = boardDifficultyPref;
+    });
+  }
+
+  Future<void> _saveSettings() async {
+    final settings = await SharedPreferences.getInstance();
+    settings.setInt('boardSize', boardSize!);
+    settings.setInt('boardDifficulty', boardDifficulty!.index);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +44,9 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () {
-            // TODO: update stored settings for the state
+            _saveSettings();
             boardViewModel.generateBoard(
-                level: boardDifficulty, dimension: boardSize);
+                level: boardDifficulty!, dimension: boardSize!);
             Navigator.of(context).pop();
           },
           child: const Text('Create'),
