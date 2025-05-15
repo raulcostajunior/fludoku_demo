@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'package:fludoku/fludoku.dart';
 import 'package:flutter/foundation.dart';
 import 'package:easy_isolate/easy_isolate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Handles board generation commands in the isolate kept by the worker internal
 /// to the BoardViewModel.
@@ -45,18 +46,40 @@ class BoardViewModel extends ChangeNotifier {
   Board _board = Board();
   Worker? _worker;
 
+  static const _defaultGenBoardSize = 9;
+  static const _defaultGenBoardLevel = PuzzleDifficulty.medium;
+
+  int? _genBoardSize;
+  PuzzleDifficulty? _genBoardLevel;
+
   bool _generating = false;
   bool _generationCancelled = false;
   String? _generationError;
   int _currGenStep = 0;
   int _totalGenSteps = 0;
 
+  BoardViewModel() {
+    _loadGenSettings();
+  }
+
   //#region Board Generation
 
-  void generateBoard(
-      {required PuzzleDifficulty level,
-      required int dimension,
-      int timeoutSecs = 15}) {
+  Future<void> _loadGenSettings() async {
+    final settings = await SharedPreferences.getInstance();
+    _genBoardSize =
+        settings.getInt('genBoardSize') ?? BoardViewModel._defaultGenBoardSize;
+    final levelIdx = settings.getInt('genBoardLevel') ??
+        BoardViewModel._defaultGenBoardLevel.index;
+    _genBoardLevel = PuzzleDifficulty.values[levelIdx];
+  }
+
+  Future<void> _saveGenSettings() async {
+    final settings = await SharedPreferences.getInstance();
+    settings.setInt('genBoardSize', _genBoardSize!);
+    settings.setInt('genBoardLevel', _genBoardLevel!.index);
+  }
+
+  void generateBoard({int timeoutSecs = 15}) {
     if (_generating) {
       // Only one board generation is possible at a given time.
       throw Exception("A board generation is already taking place!");
@@ -70,9 +93,9 @@ class BoardViewModel extends ChangeNotifier {
           _handleGenerationCommands /* runs on the background Isolate managed by the Worker */,
           errorHandler: _handleGenerationError,
           exitHandler: _handleWorkerExit,
-          initialMessage: (level, dimension, timeoutSecs));
+          initialMessage: (_genBoardLevel, _genBoardSize, timeoutSecs));
     } else {
-      _worker!.sendMessage((level, dimension, timeoutSecs));
+      _worker!.sendMessage((_genBoardLevel, _genBoardSize, timeoutSecs));
     }
   }
 
@@ -129,6 +152,25 @@ class BoardViewModel extends ChangeNotifier {
   //#endregion
 
   Board get board => _board;
+
+  int get genBoardSize => _genBoardSize ?? BoardViewModel._defaultGenBoardSize;
+  set genBoardSize(int value) {
+    if (value != _genBoardSize) {
+      _genBoardSize = value;
+      _saveGenSettings();
+      notifyListeners();
+    }
+  }
+
+  PuzzleDifficulty get genBoardLevel =>
+      _genBoardLevel ?? BoardViewModel._defaultGenBoardLevel;
+  set genBoardLevel(PuzzleDifficulty value) {
+    if (value != _genBoardLevel) {
+      _genBoardLevel = value;
+      _saveGenSettings();
+      notifyListeners();
+    }
+  }
 
   bool get generating => _generating;
 

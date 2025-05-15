@@ -45,7 +45,9 @@ class _AppScreenState extends State<AppScreen> {
                               size: 28)),
                       //const Icon(Icons.grid_on_rounded, size: 28),
                       tooltip: 'Create New Board',
-                      onPressed: onNewBoardPressed),
+                      onPressed: () {
+                        onNewBoardPressed();
+                      }),
                   IconButton(
                     icon: PlatformWidget(
                         material: (_, __) =>
