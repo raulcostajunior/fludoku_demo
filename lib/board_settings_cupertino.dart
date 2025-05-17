@@ -39,11 +39,11 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                       footer: const Padding(
                         padding: EdgeInsets.only(top: 6.0),
                         child: Text(
-                            'Number of rows and columns on the created board.'),
+                            'Number of rows and columns of the new board.'),
                       ),
                       children: [
                         CupertinoFormRow(
-                          prefix: const Text('Board Size'),
+                          prefix: const Text('New Board Size'),
                           child: CupertinoSlidingSegmentedControl<int>(
                             children: const {
                               4: Text('4'),
@@ -65,11 +65,11 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                       footer: const Padding(
                         padding: EdgeInsets.only(top: 6.0),
                         child: Text(
-                            'The harder the level, the more blank positions the generated board will have'),
+                            'The harder the level, the more blank positions the new board will have.'),
                       ),
                       children: [
                         CupertinoFormRow(
-                          prefix: const Text('Board Difficulty'),
+                          prefix: const Text('New Board Level'),
                           child: CupertinoSlidingSegmentedControl<
                               PuzzleDifficulty>(
                             children: const {
@@ -81,6 +81,32 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                             onValueChanged: (PuzzleDifficulty? value) {
                               setState(() {
                                 boardViewModel.genBoardLevel = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    CupertinoFormSection(
+                      footer: const Padding(
+                        padding: EdgeInsets.only(top: 6.0),
+                        child: Text(
+                            'Maximum allowed time, in seconds, for the board to be created.'),
+                      ),
+                      children: [
+                        CupertinoFormRow(
+                          prefix: const Text('Creation Timeout'),
+                          child: CupertinoSlidingSegmentedControl<int>(
+                            children: const {
+                              15: Text('15'),
+                              30: Text('30'),
+                              60: Text('60'),
+                              120: Text('120'),
+                            },
+                            groupValue: boardViewModel.genBoardTimeout,
+                            onValueChanged: (int? value) {
+                              setState(() {
+                                boardViewModel.genBoardTimeout = value!;
                               });
                             },
                           ),

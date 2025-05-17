@@ -48,9 +48,11 @@ class BoardViewModel extends ChangeNotifier {
 
   static const _defaultGenBoardSize = 9;
   static const _defaultGenBoardLevel = PuzzleDifficulty.medium;
+  static const _defaultGenBoardTimeout = 15;
 
   int? _genBoardSize;
   PuzzleDifficulty? _genBoardLevel;
+  int? _genBoardTimeout;
 
   bool _generating = false;
   bool _generationCancelled = false;
@@ -71,15 +73,18 @@ class BoardViewModel extends ChangeNotifier {
     final levelIdx = settings.getInt('genBoardLevel') ??
         BoardViewModel._defaultGenBoardLevel.index;
     _genBoardLevel = PuzzleDifficulty.values[levelIdx];
+    _genBoardTimeout = settings.getInt('genBoardTimeout') ??
+        BoardViewModel._defaultGenBoardTimeout;
   }
 
   Future<void> _saveGenSettings() async {
     final settings = await SharedPreferences.getInstance();
     settings.setInt('genBoardSize', _genBoardSize!);
     settings.setInt('genBoardLevel', _genBoardLevel!.index);
+    settings.setInt('genBoardTimeout', _genBoardTimeout!);
   }
 
-  void generateBoard({int timeoutSecs = 15}) {
+  void generateBoard() {
     if (_generating) {
       // Only one board generation is possible at a given time.
       throw Exception("A board generation is already taking place!");
@@ -93,9 +98,9 @@ class BoardViewModel extends ChangeNotifier {
           _handleGenerationCommands /* runs on the background Isolate managed by the Worker */,
           errorHandler: _handleGenerationError,
           exitHandler: _handleWorkerExit,
-          initialMessage: (_genBoardLevel, _genBoardSize, timeoutSecs));
+          initialMessage: (_genBoardLevel, _genBoardSize, _genBoardTimeout));
     } else {
-      _worker!.sendMessage((_genBoardLevel, _genBoardSize, timeoutSecs));
+      _worker!.sendMessage((_genBoardLevel, _genBoardSize, _genBoardTimeout));
     }
   }
 
@@ -167,6 +172,16 @@ class BoardViewModel extends ChangeNotifier {
   set genBoardLevel(PuzzleDifficulty value) {
     if (value != _genBoardLevel) {
       _genBoardLevel = value;
+      _saveGenSettings();
+      notifyListeners();
+    }
+  }
+
+  int get genBoardTimeout =>
+      _genBoardTimeout ?? BoardViewModel._defaultGenBoardTimeout;
+  set genBoardTimeout(int value) {
+    if (value != _genBoardTimeout) {
+      _genBoardTimeout = value;
       _saveGenSettings();
       notifyListeners();
     }

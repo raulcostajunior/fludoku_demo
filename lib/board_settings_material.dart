@@ -19,9 +19,9 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
         builder: (context, _) {
           return Material(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: 4.0,
                   children: <Widget>[
@@ -30,18 +30,18 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontSizeFactor: 1.2))),
-                    const SizedBox(height: 8.0),
-                    const Divider(),
+                    // const Divider(),
+                    const SizedBox(height: 16.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Board Size',
+                        Text('New Board Size',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontWeightDelta: 2)),
                         SegmentedButton<int>(
                           // When the tick of the selected icon is shown, the
-                          // segments are rescaled to accomodate the icon and that
+                          // segments are rescaled to accommodate the icon and that
                           // causes an annoying "readjustment" of the lay-out.
                           showSelectedIcon: false,
                           segments: const <ButtonSegment<int>>[
@@ -59,15 +59,13 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ),
                       ],
                     ),
-                    Text('Number of rows and columns on the created board.',
-                        style: DefaultTextStyle.of(context)
-                            .style
-                            .apply(fontSizeFactor: 0.9)),
-                    const Divider(),
+                    const Text('Number of rows and columns of the new board.'),
+                    // const Divider(),
+                    const SizedBox(height: 12.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Board Difficulty',
+                        Text('New Board Level',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontWeightDelta: 2)),
@@ -94,12 +92,41 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ),
                       ],
                     ),
-                    Text(
-                        'The harder the level, the more blank positions the generated board will have.',
-                        style: DefaultTextStyle.of(context)
-                            .style
-                            .apply(fontSizeFactor: 0.9)),
-                    const Divider(),
+                    const Text(
+                        'The harder the level, the more blank positions the new board will have.'),
+                    // const Divider(),
+                    const SizedBox(height: 12.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Creation Timeout',
+                            style: DefaultTextStyle.of(context)
+                                .style
+                                .apply(fontWeightDelta: 2)),
+                        SegmentedButton<int>(
+                          // When the tick of the selected icon is shown, the
+                          // segments are rescaled to accommodate the icon and that
+                          // causes an annoying "readjustment" of the lay-out.
+                          showSelectedIcon: false,
+                          segments: const <ButtonSegment<int>>[
+                            ButtonSegment<int>(value: 15, label: Text('15')),
+                            ButtonSegment<int>(value: 30, label: Text('30')),
+                            ButtonSegment<int>(value: 60, label: Text('60')),
+                            ButtonSegment<int>(value: 120, label: Text('120')),
+                          ],
+                          selected: {boardViewModel.genBoardTimeout},
+                          onSelectionChanged: (selection) => {
+                            setState(() {
+                              boardViewModel.genBoardTimeout = selection.first;
+                            })
+                          },
+                        ),
+                      ],
+                    ),
+                    const Text(
+                        'Maximum allowed time, in seconds, for the board to be created.'),
+                    // const Divider(),
+                    const SizedBox(height: 18.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
