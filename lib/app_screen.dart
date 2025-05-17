@@ -30,7 +30,6 @@ class _AppScreenState extends State<AppScreen> {
   Widget _buildCommon(BuildContext context) {
     return PlatformScaffold(
         appBar: PlatformAppBar(
-          // backgroundColor: Colors.transparent,
           material: (_, __) => MaterialAppBarData(elevation: 2),
           cupertino: (_, __) =>
               CupertinoNavigationBarData(brightness: Brightness.light),

@@ -13,11 +13,6 @@ void main() {
 class FludokuDemoApp extends StatelessWidget {
   const FludokuDemoApp({super.key});
 
-//   @override
-//   State<FludokuDemoApp> createState() => _FludokuDemoAppState();
-// }
-
-// class _FludokuDemoAppState extends State<FludokuDemoApp> {
   @override
   Widget build(BuildContext context) {
     return BoardProvider(
