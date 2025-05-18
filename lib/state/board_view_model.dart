@@ -44,6 +44,13 @@ void _handleGenerationCommands(
 
 class BoardViewModel extends ChangeNotifier {
   Board _board = Board();
+  // TODO: Board (in the Sudoku package) must have a special constructor, fromPuzzleBoard
+  //       that stores a "baseline", read-only version of the puzzleBoard. There must be
+  //       a parameter "verifySolutionUnicity" defaulting to true that checks at construction
+  //       time that the puzzleBoard has only one solution (condition to be a true Sudoku
+  //       board). The baseline property must be accessible via getter and the new constructor
+  //       is the one to be adopted by the application. The "_solvedBoard" machinery must then
+  //       be removed from the ViewModel.
   Board? _solvedBoard;
   Worker? _worker;
 
