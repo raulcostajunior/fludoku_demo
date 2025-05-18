@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fludoku/fludoku.dart';
-import 'board_provider.dart';
+import 'state/board_provider.dart';
 
 class BoardSettingsCupertino extends StatefulWidget {
   const BoardSettingsCupertino({super.key});

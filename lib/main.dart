@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 import 'app_screen.dart';
-import 'board_provider.dart';
-import 'board_view_model.dart';
+import 'state/board_provider.dart';
+import 'state/board_view_model.dart';
 
 void main() {
   runApp(const FludokuDemoApp());

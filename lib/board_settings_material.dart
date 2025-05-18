@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fludoku/fludoku.dart';
-import 'board_provider.dart';
+import 'state/board_provider.dart';
 
 class BoardSettingsMaterial extends StatefulWidget {
   const BoardSettingsMaterial({super.key});
