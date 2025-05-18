@@ -48,7 +48,6 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                             ButtonSegment<int>(value: 4, label: Text('4')),
                             ButtonSegment<int>(value: 9, label: Text('9')),
                             ButtonSegment<int>(value: 16, label: Text('16')),
-                            ButtonSegment<int>(value: 25, label: Text('25')),
                           ],
                           selected: {boardViewModel.genBoardSize},
                           onSelectionChanged: (selection) => {

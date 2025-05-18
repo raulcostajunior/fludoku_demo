@@ -49,7 +49,6 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                               4: Text('4'),
                               9: Text('9'),
                               16: Text('16'),
-                              25: Text('25'),
                             },
                             groupValue: boardViewModel.genBoardSize,
                             onValueChanged: (int? value) {

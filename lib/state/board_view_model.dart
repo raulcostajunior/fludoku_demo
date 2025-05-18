@@ -44,6 +44,7 @@ void _handleGenerationCommands(
 
 class BoardViewModel extends ChangeNotifier {
   Board _board = Board();
+  Board? _solvedBoard;
   Worker? _worker;
 
   static const _defaultGenBoardSize = 9;
@@ -89,6 +90,7 @@ class BoardViewModel extends ChangeNotifier {
       // Only one board generation is possible at a given time.
       throw Exception("A board generation is already taking place!");
     }
+    _solvedBoard = null;
     _generationCancelled = false;
     _generationError = null;
     _generating = true;
@@ -110,8 +112,22 @@ class BoardViewModel extends ChangeNotifier {
     }
     // Note: As the generateBoard from Fludoku is not cancellable the cancel generation must terminate the worker.
     _worker!.dispose(immediate: true);
+    // Nullify our reference - internally the Worker class takes care of closing the isolate's sender port and kill it.
+    _worker = null;
     _generationCancelled = true;
     _generating = false;
+    _solvedBoard = null;
+    notifyListeners();
+  }
+
+  void solveBoard() {
+    if (_generating) {
+      // Only one board generation is possible at a given time.
+      throw Exception("No board to solve yet!");
+    }
+    final solutions = findSolutions(_board);
+    _solvedBoard = solutions[0];
+    notifyListeners();
   }
 
   /// Handles progress data sent by the Generator worker while generating the board and after it has been
@@ -129,9 +145,12 @@ class BoardViewModel extends ChangeNotifier {
 
     if (genBoard != null) {
       _board = genBoard;
+      _solvedBoard = null;
       // Ensures that at the end currentStep equals totalSteps
       _currGenStep = _totalGenSteps;
       _generating = false;
+      _generationError = null;
+      _generationCancelled = false;
       debugPrint("Generated board:\n$genBoard");
     } else {
       _currGenStep = currentStep;
@@ -143,6 +162,8 @@ class BoardViewModel extends ChangeNotifier {
   void _handleGenerationError(dynamic data) {
     _generating = false;
     _generationError = data;
+    _generationCancelled = false;
+    _solvedBoard = null;
     debugPrint("Board generation error: $_generationError");
     notifyListeners();
   }
@@ -152,11 +173,13 @@ class BoardViewModel extends ChangeNotifier {
     _generationCancelled = true;
     _generating = false;
     _generationError = null;
+    _solvedBoard = null;
   }
 
   //#endregion
 
   Board get board => _board;
+  Board? get solvedBoard => _solvedBoard;
 
   int get genBoardSize => _genBoardSize ?? BoardViewModel._defaultGenBoardSize;
   set genBoardSize(int value) {
