@@ -10,9 +10,6 @@ class BoardSettingsCupertino extends StatefulWidget {
 }
 
 class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
-  int? boardSize;
-  PuzzleDifficulty? boardDifficulty;
-
   @override
   Widget build(BuildContext context) {
     final boardViewModel = BoardProvider.of(context);
