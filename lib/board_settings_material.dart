@@ -26,7 +26,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                   spacing: 4.0,
                   children: <Widget>[
                     Center(
-                        child: Text('New Sudoku Board',
+                        child: Text('New Sudoku Puzzle',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontSizeFactor: 1.2))),
@@ -35,7 +35,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('New Board Size',
+                        Text('New Puzzle Size',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontWeightDelta: 2)),
@@ -49,22 +49,22 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                             ButtonSegment<int>(value: 9, label: Text('9')),
                             ButtonSegment<int>(value: 16, label: Text('16')),
                           ],
-                          selected: {boardViewModel.genBoardSize},
+                          selected: {boardViewModel.genPuzzleSize},
                           onSelectionChanged: (selection) => {
                             setState(() {
-                              boardViewModel.genBoardSize = selection.first;
+                              boardViewModel.genPuzzleSize = selection.first;
                             })
                           },
                         ),
                       ],
                     ),
-                    const Text('Number of rows and columns of the new board.'),
+                    const Text('Number of rows and columns of the new puzzle.'),
                     // const Divider(),
                     const SizedBox(height: 12.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('New Board Level',
+                        Text('New Puzzle Level',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontWeightDelta: 2)),
@@ -82,17 +82,17 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                                 value: PuzzleDifficulty.hard,
                                 label: Text('Hard'))
                           ],
-                          selected: {boardViewModel.genBoardLevel},
+                          selected: {boardViewModel.genPuzzleLevel},
                           onSelectionChanged: (selection) => {
                             setState(() {
-                              boardViewModel.genBoardLevel = selection.first;
+                              boardViewModel.genPuzzleLevel = selection.first;
                             })
                           },
                         ),
                       ],
                     ),
                     const Text(
-                        'The harder the level, the more blank positions the new board will have.'),
+                        'The harder the level, the more blank positions the new puzzle will have.'),
                     // const Divider(),
                     const SizedBox(height: 12.0),
                     Row(
@@ -113,17 +113,17 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                             ButtonSegment<int>(value: 60, label: Text('60')),
                             ButtonSegment<int>(value: 120, label: Text('120')),
                           ],
-                          selected: {boardViewModel.genBoardTimeout},
+                          selected: {boardViewModel.genPuzzleTimeout},
                           onSelectionChanged: (selection) => {
                             setState(() {
-                              boardViewModel.genBoardTimeout = selection.first;
+                              boardViewModel.genPuzzleTimeout = selection.first;
                             })
                           },
                         ),
                       ],
                     ),
                     const Text(
-                        'Maximum allowed time, in seconds, for the board to be created.'),
+                        'Maximum allowed time, in seconds, for the puzzle to be created.'),
                     // const Divider(),
                     const SizedBox(height: 18.0),
                     Row(
@@ -132,7 +132,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ElevatedButton(
                           child: const Text('Create'),
                           onPressed: () {
-                            boardViewModel.generateBoard();
+                            boardViewModel.generatePuzzle();
                             Navigator.of(context).pop();
                           },
                         ),

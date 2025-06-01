@@ -31,18 +31,18 @@ class _AppScreenState extends State<AppScreen> {
     final boardViewModel = BoardProvider.of(context);
     if (boardViewModel.generationError != null) {
       // Some error happened during the generation - most likely the generation timed out
-      boardViewModel.board.clear();
+      boardViewModel.puzzle.clear();
       return [
         Text(boardViewModel.generationError!, textAlign: TextAlign.center),
         const SizedBox(height: 32),
         IconButton(
           icon: const Icon(CupertinoIcons.square_grid_2x2, size: 80),
           onPressed: onNewBoardPressed,
-          tooltip: "Create New Board",
+          tooltip: "Create New Puzzle",
         ),
         const SizedBox(height: 12),
         const Text(
-          "Create New Board",
+          "Create New Puzzle",
           textAlign: TextAlign.center,
         )
       ];
@@ -51,42 +51,34 @@ class _AppScreenState extends State<AppScreen> {
         PlatformCircularProgressIndicator(),
         const SizedBox(height: 12),
         Text(
-            "Creating ${boardViewModel.genBoardLevel.name} board with size ${boardViewModel.genBoardSize} x ${boardViewModel.genBoardSize} ..."),
+            "Creating ${boardViewModel.genPuzzleLevel.name} puzzle with size ${boardViewModel.genPuzzleSize} x ${boardViewModel.genPuzzleSize} ..."),
         const SizedBox(height: 32),
         PlatformElevatedButton(
-            child: PlatformText('Cancel Board Creation'),
+            child: PlatformText('Cancel Puzzle Creation'),
             onPressed: () {
               boardViewModel.cancelGeneration();
               // Clears any board that was being displayed when
               // the just cancelled generation was started.
-              boardViewModel.board.clear();
+              boardViewModel.puzzle.clear();
             }),
       ];
-    } else if (boardViewModel.board.isEmpty) {
+    } else if (boardViewModel.puzzle.isEmpty) {
       return [
         IconButton(
           icon: const Icon(CupertinoIcons.square_grid_2x2, size: 80),
           onPressed: onNewBoardPressed,
-          tooltip: "Create New Board",
+          tooltip: "Create New Puzzle",
         ),
         const SizedBox(height: 12),
         const Text(
-          "Create New Board",
+          "Create New Puzzle",
           textAlign: TextAlign.center,
         )
       ];
     } else {
       // There's some board to be displayed - probably along with its solution
       // TODO: instantiate a Board Widget to render the board;
-      //       both the board and the solved board from the view model must be
-      //       passed to the widget. It can use the board to derive the read-only
-      //       positions from the 0's in the generated board to output them
-      //       differently.
-      return [
-        boardViewModel.solvedBoard != null
-            ? Text(boardViewModel.solvedBoard.toString())
-            : Text(boardViewModel.board.toString())
-      ];
+      return [Text(boardViewModel.puzzle.toString())];
     }
   }
 
@@ -104,7 +96,7 @@ class _AppScreenState extends State<AppScreen> {
                   IconButton(
                       icon:
                           const Icon(CupertinoIcons.square_grid_2x2, size: 28),
-                      tooltip: 'Create New Board',
+                      tooltip: 'Create New Puzzle',
                       // Only one board generation at a time
                       onPressed: boardViewModel.generating
                           ? null
@@ -113,13 +105,13 @@ class _AppScreenState extends State<AppScreen> {
                             }),
                   IconButton(
                     icon: const Icon(CupertinoIcons.lightbulb, size: 28),
-                    tooltip: 'Solve Board',
+                    tooltip: 'Solve Puzzle',
                     onPressed: boardViewModel.generating ||
-                            boardViewModel.board.isEmpty ||
-                            boardViewModel.board.isComplete
+                            boardViewModel.puzzle.isEmpty ||
+                            boardViewModel.puzzle.isComplete
                         ? null
                         : () {
-                            boardViewModel.solveBoard();
+                            boardViewModel.solvePuzzle();
                           },
                   ),
                 ],

@@ -18,11 +18,11 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
         builder: (context, _) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: const Text('New Sudoku Board'),
+              middle: const Text('New Sudoku Puzzle'),
               trailing: CupertinoButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {
-                  boardViewModel.generateBoard();
+                  boardViewModel.generatePuzzle();
                   Navigator.of(context).pop();
                 },
                 child: const Text('Create'),
@@ -36,21 +36,21 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                       footer: const Padding(
                         padding: EdgeInsets.only(top: 6.0),
                         child: Text(
-                            'Number of rows and columns of the new board.'),
+                            'Number of rows and columns of the new puzzle.'),
                       ),
                       children: [
                         CupertinoFormRow(
-                          prefix: const Text('New Board Size'),
+                          prefix: const Text('New Puzzle Size'),
                           child: CupertinoSlidingSegmentedControl<int>(
                             children: const {
                               4: Text('4'),
                               9: Text('9'),
                               16: Text('16'),
                             },
-                            groupValue: boardViewModel.genBoardSize,
+                            groupValue: boardViewModel.genPuzzleSize,
                             onValueChanged: (int? value) {
                               setState(() {
-                                boardViewModel.genBoardSize = value!;
+                                boardViewModel.genPuzzleSize = value!;
                               });
                             },
                           ),
@@ -61,11 +61,11 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                       footer: const Padding(
                         padding: EdgeInsets.only(top: 6.0),
                         child: Text(
-                            'The harder the level, the more blank positions the new board will have.'),
+                            'The harder the level, the more blank positions the new puzzle will have.'),
                       ),
                       children: [
                         CupertinoFormRow(
-                          prefix: const Text('New Board Level'),
+                          prefix: const Text('New Puzzle Level'),
                           child: CupertinoSlidingSegmentedControl<
                               PuzzleDifficulty>(
                             children: const {
@@ -73,10 +73,10 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                               PuzzleDifficulty.medium: Text('Medium'),
                               PuzzleDifficulty.hard: Text('Hard'),
                             },
-                            groupValue: boardViewModel.genBoardLevel,
+                            groupValue: boardViewModel.genPuzzleLevel,
                             onValueChanged: (PuzzleDifficulty? value) {
                               setState(() {
-                                boardViewModel.genBoardLevel = value!;
+                                boardViewModel.genPuzzleLevel = value!;
                               });
                             },
                           ),
@@ -87,7 +87,7 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                       footer: const Padding(
                         padding: EdgeInsets.only(top: 6.0),
                         child: Text(
-                            'Maximum allowed time, in seconds, for the board to be created.'),
+                            'Maximum allowed time, in seconds, for the puzzle to be created.'),
                       ),
                       children: [
                         CupertinoFormRow(
@@ -99,10 +99,10 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                               60: Text('60'),
                               120: Text('120'),
                             },
-                            groupValue: boardViewModel.genBoardTimeout,
+                            groupValue: boardViewModel.genPuzzleTimeout,
                             onValueChanged: (int? value) {
                               setState(() {
-                                boardViewModel.genBoardTimeout = value!;
+                                boardViewModel.genPuzzleTimeout = value!;
                               });
                             },
                           ),

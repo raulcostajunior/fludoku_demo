@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:easy_isolate/easy_isolate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Handles board generation commands in the isolate kept by the worker internal
+/// Handles puzzle generation commands in the isolate kept by the worker internal
 /// to the BoardViewModel.
 ///
 /// Parameters:
@@ -21,12 +21,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// that contains the BoardViewModel instance). As a consequence, this function
 /// either had to be a static method of the BoardViewModel (with no access to
 /// the data of the BoardViewModel used by the application) or top-level
-/// function. We opt for the latter, as it seems to be cleaner.
+/// function. We opt for the latter, cleaner approach.
 void _handleGenerationCommands(
     dynamic command, SendPort commandSenderPort, SendErrorFunction sendError) {
   var (PuzzleDifficulty level, int dimension, int timeoutSecs) = command;
 
-  var (Board? genBoard, String? errorMsg) = generateBoard(
+  var (Board? genBoard, String? errorMsg) = generateSudokuPuzzle(
       level: level,
       dimension: dimension,
       timeoutSecs: timeoutSecs,
@@ -43,24 +43,16 @@ void _handleGenerationCommands(
 }
 
 class BoardViewModel extends ChangeNotifier {
-  Board _board = Board();
-  // TODO: Board (in the Sudoku package) must have a special constructor, fromPuzzleBoard
-  //       that stores a "baseline", read-only version of the puzzleBoard. There must be
-  //       a parameter "verifySolutionUnicity" defaulting to true that checks at construction
-  //       time that the puzzleBoard has only one solution (condition to be a true Sudoku
-  //       board). The baseline property must be accessible via getter and the new constructor
-  //       is the one to be adopted by the application. The "_solvedBoard" machinery must then
-  //       be removed from the ViewModel.
-  Board? _solvedBoard;
+  Board _puzzle = Board();
   Worker? _worker;
 
-  static const _defaultGenBoardSize = 9;
-  static const _defaultGenBoardLevel = PuzzleDifficulty.medium;
-  static const _defaultGenBoardTimeout = 15;
+  static const _defaultGenPuzzleSize = 9;
+  static const _defaultGenPuzzleLevel = PuzzleDifficulty.medium;
+  static const _defaultGenPuzzleTimeout = 15;
 
-  int? _genBoardSize;
-  PuzzleDifficulty? _genBoardLevel;
-  int? _genBoardTimeout;
+  int? _genPuzzleSize;
+  PuzzleDifficulty? _genPuzzleLevel;
+  int? _genPuzzleTimeout;
 
   bool _generating = false;
   bool _generationCancelled = false;
@@ -76,28 +68,27 @@ class BoardViewModel extends ChangeNotifier {
 
   Future<void> _loadGenSettings() async {
     final settings = await SharedPreferences.getInstance();
-    _genBoardSize =
-        settings.getInt('genBoardSize') ?? BoardViewModel._defaultGenBoardSize;
-    final levelIdx = settings.getInt('genBoardLevel') ??
-        BoardViewModel._defaultGenBoardLevel.index;
-    _genBoardLevel = PuzzleDifficulty.values[levelIdx];
-    _genBoardTimeout = settings.getInt('genBoardTimeout') ??
-        BoardViewModel._defaultGenBoardTimeout;
+    _genPuzzleSize = settings.getInt('genPuzzleSize') ??
+        BoardViewModel._defaultGenPuzzleSize;
+    final levelIdx = settings.getInt('genPuzzleLevel') ??
+        BoardViewModel._defaultGenPuzzleLevel.index;
+    _genPuzzleLevel = PuzzleDifficulty.values[levelIdx];
+    _genPuzzleTimeout = settings.getInt('genPuzzleTimeout') ??
+        BoardViewModel._defaultGenPuzzleTimeout;
   }
 
   Future<void> _saveGenSettings() async {
     final settings = await SharedPreferences.getInstance();
-    settings.setInt('genBoardSize', _genBoardSize!);
-    settings.setInt('genBoardLevel', _genBoardLevel!.index);
-    settings.setInt('genBoardTimeout', _genBoardTimeout!);
+    settings.setInt('genPuzzleSize', _genPuzzleSize!);
+    settings.setInt('genPuzzleLevel', _genPuzzleLevel!.index);
+    settings.setInt('genPuzzleTimeout', _genPuzzleTimeout!);
   }
 
-  void generateBoard() {
+  void generatePuzzle() {
     if (_generating) {
-      // Only one board generation is possible at a given time.
-      throw Exception("A board generation is already taking place!");
+      // Only one puzzle generation is possible at a given time.
+      throw Exception("A puzzle generation is already taking place!");
     }
-    _solvedBoard = null;
     _generationCancelled = false;
     _generationError = null;
     _generating = true;
@@ -107,33 +98,34 @@ class BoardViewModel extends ChangeNotifier {
           _handleGenerationCommands /* runs on the background Isolate managed by the Worker */,
           errorHandler: _handleGenerationError,
           exitHandler: _handleWorkerExit,
-          initialMessage: (_genBoardLevel, _genBoardSize, _genBoardTimeout));
+          initialMessage: (_genPuzzleLevel, _genPuzzleSize, _genPuzzleTimeout));
     } else {
-      _worker!.sendMessage((_genBoardLevel, _genBoardSize, _genBoardTimeout));
+      _worker!
+          .sendMessage((_genPuzzleLevel, _genPuzzleSize, _genPuzzleTimeout));
     }
   }
 
   void cancelGeneration() {
     if (!_generating) {
-      throw Exception("No board generation to be cancelled!");
+      throw Exception("No puzzle generation to be cancelled!");
     }
-    // Note: As the generateBoard from Fludoku is not cancellable the cancel generation must terminate the worker.
+    // Note: As the generatePuzzle from Fludoku is not cancellable the cancel generation must terminate the worker.
     _worker!.dispose(immediate: true);
     // Nullify our reference - internally the Worker class takes care of closing the isolate's sender port and kill it.
     _worker = null;
     _generationCancelled = true;
     _generating = false;
-    _solvedBoard = null;
     notifyListeners();
   }
 
-  void solveBoard() {
+  void solvePuzzle() {
     if (_generating) {
       // Only one board generation is possible at a given time.
-      throw Exception("No board to solve yet!");
+      throw Exception("No puzzle to solve yet!");
     }
-    final solutions = findSolutions(_board);
-    _solvedBoard = solutions[0];
+    final solutions = findSolutions(_puzzle);
+    assert(solutions.length == 1);
+    _puzzle = solutions[0];
     notifyListeners();
   }
 
@@ -148,17 +140,16 @@ class BoardViewModel extends ChangeNotifier {
   /// - `workSenderPort`: the port that can be used by the handler to communicate back with the Generator worker.
   ///
   void _handleWorkerMessages(dynamic data, SendPort workerSendPort) {
-    var (int currentStep, int totalSteps, Board? genBoard) = data;
+    var (int currentStep, int totalSteps, Board? genPuzzle) = data;
 
-    if (genBoard != null) {
-      _board = genBoard;
-      _solvedBoard = null;
+    if (genPuzzle != null) {
+      _puzzle = genPuzzle;
       // Ensures that at the end currentStep equals totalSteps
       _currGenStep = _totalGenSteps;
       _generating = false;
       _generationError = null;
       _generationCancelled = false;
-      debugPrint("Generated board:\n$genBoard");
+      debugPrint("Generated board:\n$genPuzzle");
     } else {
       _currGenStep = currentStep;
       _totalGenSteps = totalSteps;
@@ -168,10 +159,15 @@ class BoardViewModel extends ChangeNotifier {
 
   void _handleGenerationError(dynamic data) {
     _generating = false;
-    _generationError = data;
-    _generationCancelled = false;
-    _solvedBoard = null;
+    if (data is List && data.isNotEmpty && data.first is String) {
+      _generationError = data.first;
+    } else if (data is String) {
+      _generationError = data;
+    } else {
+      _generationError = "Unknown error";
+    }
     debugPrint("Board generation error: $_generationError");
+    _generationCancelled = false;
     notifyListeners();
   }
 
@@ -180,38 +176,37 @@ class BoardViewModel extends ChangeNotifier {
     _generationCancelled = true;
     _generating = false;
     _generationError = null;
-    _solvedBoard = null;
   }
 
   //#endregion
 
-  Board get board => _board;
-  Board? get solvedBoard => _solvedBoard;
+  Board get puzzle => _puzzle;
 
-  int get genBoardSize => _genBoardSize ?? BoardViewModel._defaultGenBoardSize;
-  set genBoardSize(int value) {
-    if (value != _genBoardSize) {
-      _genBoardSize = value;
+  int get genPuzzleSize =>
+      _genPuzzleSize ?? BoardViewModel._defaultGenPuzzleSize;
+  set genPuzzleSize(int value) {
+    if (value != _genPuzzleSize) {
+      _genPuzzleSize = value;
       _saveGenSettings();
       notifyListeners();
     }
   }
 
-  PuzzleDifficulty get genBoardLevel =>
-      _genBoardLevel ?? BoardViewModel._defaultGenBoardLevel;
-  set genBoardLevel(PuzzleDifficulty value) {
-    if (value != _genBoardLevel) {
-      _genBoardLevel = value;
+  PuzzleDifficulty get genPuzzleLevel =>
+      _genPuzzleLevel ?? BoardViewModel._defaultGenPuzzleLevel;
+  set genPuzzleLevel(PuzzleDifficulty value) {
+    if (value != _genPuzzleLevel) {
+      _genPuzzleLevel = value;
       _saveGenSettings();
       notifyListeners();
     }
   }
 
-  int get genBoardTimeout =>
-      _genBoardTimeout ?? BoardViewModel._defaultGenBoardTimeout;
-  set genBoardTimeout(int value) {
-    if (value != _genBoardTimeout) {
-      _genBoardTimeout = value;
+  int get genPuzzleTimeout =>
+      _genPuzzleTimeout ?? BoardViewModel._defaultGenPuzzleTimeout;
+  set genPuzzleTimeout(int value) {
+    if (value != _genPuzzleTimeout) {
+      _genPuzzleTimeout = value;
       _saveGenSettings();
       notifyListeners();
     }
