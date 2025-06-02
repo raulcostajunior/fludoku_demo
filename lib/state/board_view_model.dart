@@ -159,15 +159,9 @@ class BoardViewModel extends ChangeNotifier {
 
   void _handleGenerationError(dynamic data) {
     _generating = false;
-    if (data is List && data.isNotEmpty && data.first is String) {
-      _generationError = data.first;
-    } else if (data is String) {
-      _generationError = data;
-    } else {
-      _generationError = "Unknown error";
-    }
-    debugPrint("Board generation error: $_generationError");
+    _generationError = data;
     _generationCancelled = false;
+    debugPrint("Board generation error: $_generationError");
     notifyListeners();
   }
 
