@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'board_settings_material.dart';
 import 'board_settings_cupertino.dart';
+import 'board_widget.dart';
 import 'state/board_provider.dart';
 
 class AppScreen extends StatefulWidget {
@@ -76,9 +77,13 @@ class _AppScreenState extends State<AppScreen> {
         )
       ];
     } else {
-      // There's some board to be displayed - probably along with its solution
-      // TODO: instantiate a Board Widget to render the board;
-      return [Text(boardViewModel.puzzle.toString())];
+      // There's some puzzle to be displayed - probably along with its solution
+      return [
+        Expanded(
+            child: Padding(
+                padding: const EdgeInsetsGeometry.all(12),
+                child: BoardWidget(boardViewModel.puzzle)))
+      ];
     }
   }
 
