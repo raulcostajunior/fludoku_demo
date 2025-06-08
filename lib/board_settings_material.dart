@@ -108,10 +108,10 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                           // causes an annoying "readjustment" of the lay-out.
                           showSelectedIcon: false,
                           segments: const <ButtonSegment<int>>[
-                            ButtonSegment<int>(value: 15, label: Text('15')),
                             ButtonSegment<int>(value: 30, label: Text('30')),
-                            ButtonSegment<int>(value: 60, label: Text('60')),
                             ButtonSegment<int>(value: 120, label: Text('120')),
+                            ButtonSegment<int>(value: 300, label: Text('300')),
+                            ButtonSegment<int>(value: 600, label: Text('600')),
                           ],
                           selected: {boardViewModel.genPuzzleTimeout},
                           onSelectionChanged: (selection) => {

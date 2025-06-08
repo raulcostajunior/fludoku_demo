@@ -94,10 +94,10 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                           prefix: const Text('Creation Timeout'),
                           child: CupertinoSlidingSegmentedControl<int>(
                             children: const {
-                              15: Text('15'),
                               30: Text('30'),
-                              60: Text('60'),
                               120: Text('120'),
+                              300: Text('300'),
+                              600: Text('600'),
                             },
                             groupValue: boardViewModel.genPuzzleTimeout,
                             onValueChanged: (int? value) {
