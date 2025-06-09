@@ -25,14 +25,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 void _handleGenerationCommands(
     dynamic command, SendPort commandSenderPort, SendErrorFunction sendError) {
   var (PuzzleDifficulty level, int dimension, int timeoutSecs) = command;
+  Board? genBoard;
+  String? errorMsg;
 
-  var (Board? genBoard, String? errorMsg) = generateSudokuPuzzle(
-      level: level,
-      dimension: dimension,
-      timeoutSecs: timeoutSecs,
-      onProgress: ({int current = 1, int total = 1}) {
-        commandSenderPort.send((current, total, null));
-      });
+  if (timeoutSecs > 0) {
+    (genBoard, errorMsg) = generateSudokuPuzzle(
+        level: level,
+        dimension: dimension,
+        timeoutSecs: timeoutSecs,
+        onProgress: ({int current = 1, int total = 1}) {
+          commandSenderPort.send((current, total, null));
+        });
+  } else {
+    (genBoard, errorMsg) = generateSudokuPuzzle(
+        level: level,
+        dimension: dimension,
+        onProgress: ({int current = 1, int total = 1}) {
+          commandSenderPort.send((current, total, null));
+        });
+  }
+
   if (genBoard != null) {
     // The board generation process succeeded - send the "final progress" update
     // For the "final progress" update negative flagging values are used

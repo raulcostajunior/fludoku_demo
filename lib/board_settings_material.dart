@@ -111,7 +111,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                             ButtonSegment<int>(value: 30, label: Text('30')),
                             ButtonSegment<int>(value: 120, label: Text('120')),
                             ButtonSegment<int>(value: 300, label: Text('300')),
-                            ButtonSegment<int>(value: 600, label: Text('600')),
+                            ButtonSegment<int>(value: -1, label: Text('∞')),
                           ],
                           selected: {boardViewModel.genPuzzleTimeout},
                           onSelectionChanged: (selection) => {

@@ -97,7 +97,7 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                               30: Text('30'),
                               120: Text('120'),
                               300: Text('300'),
-                              600: Text('600'),
+                              -1: Text('∞'),
                             },
                             groupValue: boardViewModel.genPuzzleTimeout,
                             onValueChanged: (int? value) {

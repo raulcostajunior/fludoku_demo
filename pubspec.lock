@@ -93,10 +93,10 @@ packages:
     dependency: "direct main"
     description:
       name: fludoku
-      sha256: f9327b8817270bd49299182f0389dbe17019baabd41f97f4a9f0628262b76f8d
+      sha256: "7be47e8c0a9ea4b22eb7d521465f03d0a4aa8eebfc206e8b368e3716d6c5ee0b"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+    version: "4.0.4"
   flutter:
     dependency: "direct main"
     description: flutter
