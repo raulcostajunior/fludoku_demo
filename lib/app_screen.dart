@@ -22,7 +22,7 @@ class _AppScreenState extends State<AppScreen> {
     showPlatformModalSheet(
         context: context,
         material:
-            MaterialModalSheetData(showDragHandle: true, useSafeArea: false),
+            MaterialModalSheetData(showDragHandle: true, useSafeArea: true),
         builder: (context) => PlatformWidget(
             cupertino: (_, __) => const BoardSettingsCupertino(),
             material: (_, __) => const BoardSettingsMaterial()));

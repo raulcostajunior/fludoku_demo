@@ -20,10 +20,10 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
           return Material(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: 4.0,
+              child: ListView(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // spacing: 4.0,
                   children: <Widget>[
                     Center(
                         child: Text('New Sudoku Puzzle',
@@ -35,7 +35,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('New Puzzle Size',
+                        Text('Puzzle Size',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontWeightDelta: 2)),
@@ -58,13 +58,12 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ),
                       ],
                     ),
-                    const Text('Number of rows and columns of the new puzzle.'),
                     // const Divider(),
                     const SizedBox(height: 12.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('New Puzzle Level',
+                        Text('Puzzle Level',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontWeightDelta: 2)),
@@ -91,14 +90,12 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ),
                       ],
                     ),
-                    const Text(
-                        'The harder the level, the more blank positions the new puzzle will have.'),
                     // const Divider(),
                     const SizedBox(height: 12.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Creation Timeout',
+                        Text('Timeout (seconds)',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontWeightDelta: 2)),
@@ -108,9 +105,8 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                           // causes an annoying "readjustment" of the lay-out.
                           showSelectedIcon: false,
                           segments: const <ButtonSegment<int>>[
-                            ButtonSegment<int>(value: 30, label: Text('30')),
+                            ButtonSegment<int>(value: 60, label: Text('60')),
                             ButtonSegment<int>(value: 120, label: Text('120')),
-                            ButtonSegment<int>(value: 300, label: Text('300')),
                             ButtonSegment<int>(value: -1, label: Text('∞')),
                           ],
                           selected: {boardViewModel.genPuzzleTimeout},
@@ -122,8 +118,6 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ),
                       ],
                     ),
-                    const Text(
-                        'Maximum allowed time, in seconds, for the puzzle to be created.'),
                     // const Divider(),
                     const SizedBox(height: 18.0),
                     Row(
