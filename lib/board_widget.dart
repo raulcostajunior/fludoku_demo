@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class BoardWidget extends StatelessWidget {
   final Board _board;
+
   const BoardWidget(this._board, {super.key});
 
   @override
@@ -27,12 +28,10 @@ class BoardWidget extends StatelessWidget {
       for (var c = 0; c < _board.dimension; c++) {
         final value = _board.getAt(row: r, col: c);
         boxes.add(Container(
-          //   width: 25,
-          //   height: 25,
           decoration: BoxDecoration(
               border: BoxBorder.all(),
               color: (_board.readOnlyPositions.contains((row: r, col: c))
-                  ? Colors.grey[300]
+                  ? Colors.grey[200]
                   : Colors.white)),
           child: Text(
             value > 0 ? value.toString() : "",

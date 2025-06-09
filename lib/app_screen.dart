@@ -58,9 +58,6 @@ class _AppScreenState extends State<AppScreen> {
             child: PlatformText('Cancel Puzzle Creation'),
             onPressed: () {
               boardViewModel.cancelGeneration();
-              // Clears any board that was being displayed when
-              // the just cancelled generation was started.
-              boardViewModel.puzzle.clear();
             }),
       ];
     } else if (boardViewModel.puzzle.isEmpty) {

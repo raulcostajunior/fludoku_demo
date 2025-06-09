@@ -21,16 +21,13 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
-                  // spacing: 4.0,
                   children: <Widget>[
                     Center(
                         child: Text('New Sudoku Puzzle',
                             style: DefaultTextStyle.of(context)
                                 .style
                                 .apply(fontSizeFactor: 1.2))),
-                    // const Divider(),
+                    const Divider(),
                     const SizedBox(height: 16.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,7 +55,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ),
                       ],
                     ),
-                    // const Divider(),
+                    const Divider(),
                     const SizedBox(height: 12.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,7 +87,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ),
                       ],
                     ),
-                    // const Divider(),
+                    const Divider(),
                     const SizedBox(height: 12.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,7 +115,7 @@ class _BoardSettingsMaterialState extends State<BoardSettingsMaterial> {
                         ),
                       ],
                     ),
-                    // const Divider(),
+                    const Divider(),
                     const SizedBox(height: 18.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
