@@ -1,6 +1,8 @@
 import 'package:fludoku/fludoku.dart';
 import 'package:flutter/material.dart';
 
+import 'dart:math';
+
 class BoardWidget extends StatelessWidget {
   final Board _board;
 
@@ -9,38 +11,49 @@ class BoardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisCount: _board.dimension,
-      crossAxisSpacing: 4,
-      mainAxisSpacing: 4,
+      crossAxisCount: sqrt(_board.dimension).toInt(),
+      crossAxisSpacing: 2,
+      mainAxisSpacing: 2,
       children: _buildGrid(context),
     );
   }
 
   List<Widget> _buildGrid(BuildContext context) {
-    var boxes = <Container>[];
+    var groups = <Container>[];
     double fontSize = 12;
     if (_board.dimension == 4) {
       fontSize = 58;
     } else if (_board.dimension == 9) {
       fontSize = 24;
     }
-    for (var r = 0; r < _board.dimension; r++) {
-      for (var c = 0; c < _board.dimension; c++) {
-        final value = _board.getAt(row: r, col: c);
-        boxes.add(Container(
-          decoration: BoxDecoration(
-              border: BoxBorder.all(),
-              color: (_board.readOnlyPositions.contains((row: r, col: c))
-                  ? Colors.grey[200]
-                  : Colors.white)),
-          child: Text(
-            value > 0 ? value.toString() : "",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: fontSize),
-          ),
-        ));
+    final groupSize = sqrt(_board.dimension).toInt();
+    for (var r = 0; r < _board.dimension; r += groupSize) {
+      for (var c = 0; c < _board.dimension; c += groupSize) {
+        var cells = <Container>[];
+        for (var ri = r; ri < r + groupSize; ri++) {
+          for (var ci = c; ci < c + groupSize; ci++) {
+            final value = _board.getAt(row: ri, col: ci);
+            final isReadOnly =
+                _board.readOnlyPositions.contains((row: ri, col: ci));
+            cells.add(Container(
+                decoration: BoxDecoration(
+                    border: BoxBorder.all(color: Colors.grey[400]!),
+                    color: isReadOnly ? Colors.grey[200] : Colors.white),
+                child: Center(
+                  child: Text(
+                    value > 0 ? value.toString() : "",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: fontSize),
+                  ),
+                )));
+          }
+        }
+        groups.add(Container(
+            decoration: BoxDecoration(
+                border: BoxBorder.all(color: Colors.black, width: 1)),
+            child: GridView.count(crossAxisCount: groupSize, children: cells)));
       }
     }
-    return boxes;
+    return groups;
   }
 }
