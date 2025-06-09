@@ -47,7 +47,10 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                               9: Text('9'),
                               16: Text('16'),
                             },
-                            groupValue: boardViewModel.genPuzzleSize,
+                            groupValue: boardViewModel.genPuzzleSize == 4 ||
+                                    boardViewModel.genPuzzleSize == 16
+                                ? boardViewModel.genPuzzleSize
+                                : 9,
                             onValueChanged: (int? value) {
                               setState(() {
                                 boardViewModel.genPuzzleSize = value!;
@@ -98,7 +101,10 @@ class _BoardSettingsCupertinoState extends State<BoardSettingsCupertino> {
                               120: Text('120'),
                               -1: Text('∞'),
                             },
-                            groupValue: boardViewModel.genPuzzleTimeout,
+                            groupValue: boardViewModel.genPuzzleTimeout == 60 ||
+                                    boardViewModel.genPuzzleTimeout == 120
+                                ? boardViewModel.genPuzzleTimeout
+                                : -1,
                             onValueChanged: (int? value) {
                               setState(() {
                                 boardViewModel.genPuzzleTimeout = value!;
