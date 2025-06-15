@@ -9,10 +9,6 @@ puzzle generation to be `60` seconds, `120` seconds, or `infinite`.
 Once a puzzle has been generated, it can be solved immediately by tapping the light
 bulb icon at the top of the screen (screenshots below).
 
-<div style="display: flex; gap: 24px; flex-wrap: wrap;">
-    <img src="doc/images/fludoku_demo_iOS.png" alt="create_puzzle_iOS" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 8px; max-width: 45%;">
-    <img src="doc/images/fludoku_demo_iOS_board.png" alt="fludoku_demo_iOS_board.png" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 8px; max-width: 45%;">
-</div>
 <br><br>
 <div style="display: flex; gap: 24px; flex-wrap: wrap;">
     <img src="doc/images/fludoku_demo_android.png" alt="create_puzzle_android" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 4px; max-width: 45%;">
@@ -20,7 +16,7 @@ bulb icon at the top of the screen (screenshots below).
 </div>
 <br><br>
 
-`fludoko_demo` demonstrates two important aspects for using Fludoku in a Flutter application that
+`fludoku_demo` demonstrates two important aspects for using Fludoku in a Flutter application that
 may not be
 immediately obvious:
 
