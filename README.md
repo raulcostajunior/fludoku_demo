@@ -5,7 +5,7 @@ A minimalistic demo Flutter application for the [Fludoku](https://pub.dev/packag
 The demo allows creating Sudoku puzzles of dimensions `4`, `9`, and `16`, with difficulty degrees
 ranging from `Easy` to `Hard`. It is also supports specifying the timeout for
 puzzle generation to be `60` seconds, `120` seconds, or `infinite`.
-<br><br>
+
 Once a puzzle has been generated, it can be solved immediately by tapping the light
 bulb icon at the top of the screen (screenshots below).
 
