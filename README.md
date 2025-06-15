@@ -1,16 +1,34 @@
 # fludoku_demo
 
-A new Flutter project.
+A minimalistic demo Flutter application for the [Fludoku](https://pub.dev/packages/fludoku) package.
 
-## Getting Started
+The demo allows creating Sudoku puzzles of dimensions `4`, `9`, and `16`, with difficulty degrees
+ranging from `Easy` to `Hard`. It is also supports specifying the timeout for
+puzzle generation to be `60` seconds, `120` seconds, or `infinite`.
+<br><br>
+Once a puzzle has been generated, it can be solved immediately by tapping the light
+bulb icon at the top of the screen (screenshots below).
 
-This project is a starting point for a Flutter application.
+<div style="display: flex; gap: 24px; flex-wrap: wrap;">
+    <img src="doc/images/fludoku_demo_iOS.png" alt="create_puzzle_iOS" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 8px; max-width: 45%;">
+    <img src="doc/images/fludoku_demo_iOS_board.png" alt="fludoku_demo_iOS_board.png" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 8px; max-width: 45%;">
+</div>
+<br><br>
+<div style="display: flex; gap: 24px; flex-wrap: wrap;">
+    <img src="doc/images/fludoku_demo_android.png" alt="create_puzzle_android" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 4px; max-width: 45%;">
+    <img src="doc/images/fludoku_demo_android_board.png" alt="fludoku_demo_android_board.png" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 4px; max-width: 45%;">
+</div>
+<br><br>
 
-A few resources to get you started if this is your first Flutter project:
+`fludoko_demo` demonstrates two important aspects for using Fludoku in a Flutter application that
+may not be
+immediately obvious:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- how the `Board` property `readOnlyPositions` retains the data about which positions are part of
+  the puzzle definition (have non-zero values initially) and which ones are to be filled to solve
+  the puzzle. The class that makes use of this property in the demo is `BoardWidget`;
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- how to isolate (pum almost unavoidable :)) the puzzle generation into its own background
+  cancellable task using a Dart `Isolate`. The very
+  nice [easy-isolate](https://pub.dev/packages/easy_isolate) package is used to simplify the demo's
+  implementation significantly.
