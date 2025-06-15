@@ -11,8 +11,8 @@ bulb icon at the top of the screen (screenshots below).
 
 <br/>
 <div style="display: flex; gap: 48px; flex-wrap: wrap;">
-    <img src="doc/images/fludoku_demo_android.png" alt="create_puzzle_android" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 4px; max-width: 45%;">
-    <img src="doc/images/fludoku_demo_android_board.png" alt="fludoku_demo_android_board.png" style="box-shadow: 0 4px 16px rgba(0,0,0,0.25); border-radius: 4px; max-width: 45%;">
+    <img src="doc/images/fludoku_demo_android.png" alt="create_puzzle_android">
+    <img src="doc/images/fludoku_demo_android_board.png" alt="fludoku_demo_android_board.png">
 </div>
 <br/><br/>
 
