@@ -1,4 +1,4 @@
-package com.example.fludoku_demo
+package raul.costa.fludoku_demo
 
 import io.flutter.embedding.android.FlutterActivity
 
