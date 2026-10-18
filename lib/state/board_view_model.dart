@@ -60,7 +60,7 @@ class BoardViewModel extends ChangeNotifier {
 
   static const _defaultGenPuzzleSize = 9;
   static const _defaultGenPuzzleLevel = PuzzleDifficulty.medium;
-  static const _defaultGenPuzzleTimeout = 30;
+  static const _defaultGenPuzzleTimeout = 60;
 
   int? _genPuzzleSize;
   PuzzleDifficulty? _genPuzzleLevel;
